@@ -28,7 +28,9 @@ module.exports = {
       then simply use the object name for requires in the future*/
       Main: 'app/components/Main.jsx',
       applicationStyles: 'app/styles/app.scss',
-      Nav: 'app/components/Nav.jsx'
+      Nav: 'app/components/Nav.jsx',
+      Timer: 'app/components/Timer.jsx',
+      Countdown: 'app/components/Countdown.jsx',
     },
     extensions: ['', '.js', '.jsx']
   },
