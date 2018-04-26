@@ -25589,14 +25589,74 @@
 	'use strict';
 
 	var React = __webpack_require__(8);
+	var Clock = __webpack_require__(233);
+	var Controls = __webpack_require__(235);
 
-	var Timer = function Timer() {
-	    return React.createElement(
-	        'div',
-	        null,
-	        'Timer Component'
-	    );
-	};
+	var Timer = React.createClass({
+	    displayName: 'Timer',
+
+	    // create an initial state
+	    getInitialState: function getInitialState() {
+	        return {
+	            count: 0,
+	            countdownStatus: 'paused'
+	        };
+	    },
+	    // when a change in state or props  is detected, this method gets called automatically
+	    componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	        // if current state is not equal to prev state ('stopped')
+	        if (this.state.countdownStatus !== prevState.countdownStatus) {
+	            switch (this.state.countdownStatus) {
+	                case 'started':
+	                    this.startTiming();
+	                    break;
+	                case 'stopped':
+	                    this.setState({ count: 0 });
+	                case 'paused':
+	                    clearInterval(this.timer);
+	                    this.timer = undefined;
+	                    break;
+	            }
+	        }
+	    },
+	    // adds a second to the clock every second
+	    startTiming: function startTiming() {
+	        var _this = this;
+
+	        this.timer = setInterval(function () {
+	            var newCount = _this.state.count + 1;
+	            _this.setState({ count: newCount });
+	        }, 1000);
+	    },
+	    // fires right before the component gets removed from the DOM
+	    componentWillUnmount: function componentWillUnmount() {
+	        // the moment when user navigates away from component, clear the timer
+	        clearInterval(this.timer);
+	        this.timer = undefined;
+	    },
+	    handleStatusChange: function handleStatusChange(newStatus) {
+	        this.setState({ countdownStatus: newStatus });
+	    },
+	    render: function render() {
+	        // grab the variables from the state
+	        var _state = this.state,
+	            count = _state.count,
+	            countdownStatus = _state.countdownStatus;
+
+
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'h1',
+	                { className: 'page-title' },
+	                'Timer App'
+	            ),
+	            React.createElement(Clock, { totalSeconds: count }),
+	            React.createElement(Controls, { countdownStatus: countdownStatus, onStatusChange: this.handleStatusChange })
+	        );
+	    }
+	});
 
 	module.exports = Timer;
 
@@ -25694,6 +25754,11 @@
 	        return React.createElement(
 	            'div',
 	            null,
+	            React.createElement(
+	                'h1',
+	                { className: 'page-title' },
+	                'Countdown App'
+	            ),
 	            React.createElement(Clock, { totalSeconds: count }),
 	            renderControlArea()
 	        );
@@ -25828,7 +25893,7 @@
 	          { className: 'button secondary', onClick: _this2.onStatusChange('paused') },
 	          'Pause'
 	        );
-	      } else if (countdownStatus === 'paused') {
+	      } else {
 	        return React.createElement(
 	          'button',
 	          { className: 'button primary', onClick: _this2.onStatusChange('started') },
@@ -26235,7 +26300,7 @@
 
 
 	// module
-	exports.push([module.id, ".top-bar, .top-bar ul {\n  background-color: #333333; }\n\n.top-bar .menu-text {\n  color: white; }\n\n.top-bar .menu > .menu-text > a {\n  display: inline;\n  padding: 0; }\n\n.top-bar .active-link {\n  font-weight: bold; }\n\n.clock {\n  align-items: center;\n  background-color: #B5D0E2;\n  border: 2px solid #2099E8;\n  border-radius: 50%;\n  display: flex;\n  height: 14rem;\n  justify-content: center;\n  margin: 4rem auto;\n  width: 14rem; }\n\n.clock-text {\n  color: white;\n  font-size: 2.25rem;\n  font-weight: 200; }\n\n.controls {\n  display: flex;\n  justify-content: center; }\n  .controls .button {\n    padding: .75rem 3rem; }\n  .controls .button:first-child {\n    margin-right: 1.75rem; }\n", ""]);
+	exports.push([module.id, ".top-bar, .top-bar ul {\n  background-color: #333333; }\n\n.top-bar .menu-text {\n  color: white; }\n\n.top-bar .menu > .menu-text > a {\n  display: inline;\n  padding: 0; }\n\n.top-bar .active-link {\n  font-weight: bold; }\n\n.clock {\n  align-items: center;\n  background-color: #B5D0E2;\n  border: 2px solid #2099E8;\n  border-radius: 50%;\n  display: flex;\n  height: 14rem;\n  justify-content: center;\n  margin: 4rem auto;\n  width: 14rem; }\n\n.clock-text {\n  color: white;\n  font-size: 2.25rem;\n  font-weight: 200; }\n\n.controls {\n  display: flex;\n  justify-content: center; }\n  .controls .button {\n    padding: .75rem 3rem; }\n  .controls .button:first-child {\n    margin-right: 1.75rem; }\n\n.page-title {\n  margin: 2rem 0;\n  text-align: center; }\n", ""]);
 
 	// exports
 
