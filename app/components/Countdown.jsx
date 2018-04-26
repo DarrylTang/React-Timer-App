@@ -29,6 +29,12 @@ var Countdown = React.createClass({
         }
 
     },
+    // fires right before the component gets removed from the DOM
+    componentWillUnmount: function () {
+        // the moment when user navigates away from component, clear the timer
+        clearInterval(this.timer);
+        this.timer = undefined;
+    },
     startTimer: function() {
         // every 1 sec, - 1sec from the current count until it reaches 0
         this.timer = setInterval(() => {
@@ -37,6 +43,10 @@ var Countdown = React.createClass({
                 // makes sure that count doesnt go below 0
                 count: newCount >= 0 ? newCount : 0
             });
+
+            if(newCount === 0){
+                this.setState({countdownStatus: 'stopped'});
+            }
         }, 1000);
     },
     /* when user submits the form, it will change the 'count' state to 
